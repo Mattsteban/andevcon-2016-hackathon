@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="rating_view">
+        <attr name="field_name" format="string"  />
+        <attr name="stars" format="integer" />
+    </declare-styleable>
+
+</resources>
