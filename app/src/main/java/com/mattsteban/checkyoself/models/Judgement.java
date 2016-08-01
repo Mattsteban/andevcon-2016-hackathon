@@ -11,6 +11,11 @@ public class Judgement {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
+    public Judgement(String fieldName, int stars){
+        this.fieldName = fieldName;
+        this.fieldValue = stars;
+    }
+
     public String getFieldName() {
         return fieldName;
     }
