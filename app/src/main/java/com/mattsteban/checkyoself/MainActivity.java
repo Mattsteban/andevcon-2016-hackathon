@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnTriggerUserCall;
 
     FirebaseDatabase database;
+    User currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,6 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         database = FirebaseDatabase.getInstance();
-        final DatabaseReference dbRefUsers = database.getReference("users");
-
 
         FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
@@ -59,25 +58,22 @@ public class MainActivity extends AppCompatActivity {
                     String email = user.getEmail();
                     Uri photoUrl = user.getPhotoUrl();
 
-
                     // The user's ID, unique to the Firebase project. Do NOT use this value to
                     // authenticate with your backend server, if you have one. Use
                     // FirebaseUser.getToken() instead.
                     String uid = user.getUid();
 
-                    tvCurrentLoggedInEmail.setText(email);
+                    DatabaseReference dbRefUsers = database.getReference(Static.USERS).child(uid);
 
-                    dbRefUsers.setValue(new User(email, name, email, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com"));
+                    tvCurrentLoggedInEmail.setText(email);
+                    currentUser = new User(email, name, email, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com");
+                    dbRefUsers.setValue(currentUser);
                 } else {
                     // User is signed out
                     tvCurrentLoggedInEmail.setText("Not Currently Signed In.");
                 }
             }
         });
-    }
-
-    private void writeNewUser(){
-
     }
 
     @OnClick(R.id.btn_trigger_user_call)
@@ -144,6 +140,24 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "User Sign In Failure.", Toast.LENGTH_SHORT).show();
 
             }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (currentUser != null && database != null){
+            currentUser.isOnline = true;
+            database.getReference(Static.USERS).setValue(currentUser);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (currentUser != null && database != null){
+            currentUser.isOnline = false;
+            database.getReference(Static.USERS).setValue(currentUser);
         }
     }
 }
