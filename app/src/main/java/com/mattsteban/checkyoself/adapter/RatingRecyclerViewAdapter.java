@@ -1,6 +1,5 @@
 package com.mattsteban.checkyoself.adapter;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +17,11 @@ import java.util.List;
  */
 public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecyclerViewAdapter.CustomViewHolder> {
     private List<Judgement> judgementList;
-    private Context mContext;
 
 
 
-    public RatingRecyclerViewAdapter(Context context, List<Judgement> judgementList) {
+    public RatingRecyclerViewAdapter(List<Judgement> judgementList) {
             this.judgementList = judgementList;
-            this.mContext = context;
     }
 
     @Override

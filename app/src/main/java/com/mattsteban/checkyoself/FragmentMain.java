@@ -36,7 +36,7 @@ public class FragmentMain extends Fragment {
         judgementList.add(new Judgement("Happy",4));
         judgementList.add(new Judgement("Ugly",2));
 
-        RatingRecyclerViewAdapter adapter = new RatingRecyclerViewAdapter(getActivity(),judgementList);
+        RatingRecyclerViewAdapter adapter = new RatingRecyclerViewAdapter(judgementList);
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
