@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "118935046333",
+    "firebase_url": "https://check-yoself.firebaseio.com",
+    "project_id": "check-yoself",
+    "storage_bucket": "check-yoself.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118935046333:android:8630faabb24fb7ea",
+        "android_client_info": {
+          "package_name": "com.mattsteban.checkyoself"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "118935046333-1n36uitv3r7vh89556ti195ojc5fi0ai.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mattsteban.checkyoself",
+            "certificate_hash": "A3BC7634A068D4CD7F6174216C79737EFA248EF6"
+          }
+        },
+        {
+          "client_id": "118935046333-akj47ss2njbenm783u5hu0vt9ce5pqdc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHF31U-ARxylxeGe2bWG1RDr4ChljrE4o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "118935046333-akj47ss2njbenm783u5hu0vt9ce5pqdc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
