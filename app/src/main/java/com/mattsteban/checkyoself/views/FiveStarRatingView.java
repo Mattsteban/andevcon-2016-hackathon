@@ -25,10 +25,7 @@ public class FiveStarRatingView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.inflatable_five_star_layout, this, true);
-        bindViews();
-
-        handleAttrs(context,attrs);
-        updateStars(totalStars);
+        handleItBaby(context,attrs);
     }
 
     public FiveStarRatingView(Context context, AttributeSet attrs,int totalStars){
@@ -36,11 +33,15 @@ public class FiveStarRatingView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.inflatable_five_star_layout, this, true);
-        bindViews();
         this.totalStars = totalStars;
+        handleItBaby(context,attrs);
+
+    }
+
+    private void handleItBaby(Context context , AttributeSet attrs){
+        bindViews();
         handleAttrs(context,attrs);
         updateStars(totalStars);
-
     }
 
     private void handleAttrs(Context context,AttributeSet attrs){
