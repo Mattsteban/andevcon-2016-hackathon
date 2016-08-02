@@ -23,7 +23,24 @@ public class RatingPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return RatingCardFragment.newInstance(listOfUsers.get(position).getId());
+//        return RatingCardFragment.newInstance(listOfUsers.get(position).getId());
+        return getCorrectFragmentInstance(position);
+    }
+
+    private Fragment getCorrectFragmentInstance(int position){
+        String id = listOfUsers.get(position).getId();
+        //if there's only one
+        if(getCount() == 1)
+            return RatingCardFragment.newInstance(id,false,false);
+        //if it's first one in the list
+        else if(position  == 0)
+            return RatingCardFragment.newInstance(id,false,true);
+        //if it's the last one in the list
+        else if(position == getCount() - 1)
+            return RatingCardFragment.newInstance(id,true,false);
+        //for everythign in between
+        else
+            return RatingCardFragment.newInstance(id,true,true);
     }
 
     @Override

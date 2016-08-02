@@ -47,6 +47,12 @@ public class RatingCardFragment extends Fragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.left_arrow)
+    ImageView leftArrow;
+
+    @BindView(R.id.right_arrow)
+    ImageView rightArrow;
+
     String ratingCardUserId;
 
     RatingRecyclerViewAdapter adapter;
@@ -58,16 +64,31 @@ public class RatingCardFragment extends Fragment {
         f.setArguments(b);
         return f;
     }
+
+    public static Fragment newInstance(String ratingCardUserId,boolean showLeftArrow,boolean showRightArrow){
+        Fragment f = newInstance(ratingCardUserId);
+        f.getArguments().putBoolean(Static.SHOW_LEFT_ARROW,showLeftArrow);
+        f.getArguments().putBoolean(Static.SHOW_RIGHT_ARROW,showRightArrow);
+        return f;
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rating_card,container,false);
         ButterKnife.bind(this,view);
 
+        boolean showLeftArrow = false;
+        boolean showRightArrow = false;
+
         Bundle b = getArguments();
         if (b != null){
             ratingCardUserId = b.getString(Static.RATING_CARD_USER_ID);
+            showLeftArrow = b.getBoolean(Static.SHOW_LEFT_ARROW);
+            showRightArrow = b.getBoolean(Static.SHOW_RIGHT_ARROW);
         }
+
+        manageArrows(showLeftArrow,showRightArrow);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
@@ -128,6 +149,18 @@ public class RatingCardFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    private void manageArrows(boolean showLeftArrow,boolean showRightArrow){
+        if(showLeftArrow)
+            leftArrow.setVisibility(View.VISIBLE);
+        else
+            leftArrow.setVisibility(View.INVISIBLE);
+
+        if(showRightArrow)
+            rightArrow.setVisibility(View.VISIBLE);
+        else
+            rightArrow.setVisibility(View.INVISIBLE);
     }
 
     private void bindAdapter(Rating rating){

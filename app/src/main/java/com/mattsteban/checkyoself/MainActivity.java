@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     isComplete = true;
                     FragmentManager fm =getSupportFragmentManager();
 
-                    pagerAdapter = new RatingPagerAdapter(fm,userList);
+                    pagerAdapter = new RatingPagerAdapter(fm,new ArrayList<>(userList));
                     ratingViewPager.setAdapter(pagerAdapter);
                 }
             }
