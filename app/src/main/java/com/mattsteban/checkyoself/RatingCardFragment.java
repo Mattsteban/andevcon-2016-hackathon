@@ -56,6 +56,8 @@ public class RatingCardFragment extends Fragment {
     String ratingCardUserId;
 
     RatingRecyclerViewAdapter adapter;
+    DatabaseReference dbRefUser;
+    ValueEventListener valueEventListener;
 
     public static Fragment newInstance(String ratingCardUserId){
         Bundle b = new Bundle();
@@ -91,8 +93,8 @@ public class RatingCardFragment extends Fragment {
         manageArrows(showLeftArrow,showRightArrow);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
-        dbRefUser.addValueEventListener(new ValueEventListener() {
+        dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
+        valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final User user = dataSnapshot.getValue(User.class);
@@ -116,7 +118,8 @@ public class RatingCardFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        dbRefUser.addValueEventListener(valueEventListener);
 
 
         DatabaseReference dbRefRatings = db.getReference(Static.RATINGS);
@@ -190,6 +193,12 @@ public class RatingCardFragment extends Fragment {
 
             RatingsHelper.postRating(rating);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        dbRefUser.removeEventListener(valueEventListener);
     }
 
     @Override
