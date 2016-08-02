@@ -65,6 +65,8 @@ public class RatingCardFragment extends Fragment {
         return f;
     }
 
+<<<<<<< HEAD
+=======
     public static Fragment newInstance(String ratingCardUserId,boolean showLeftArrow,boolean showRightArrow){
         Fragment f = newInstance(ratingCardUserId);
         f.getArguments().putBoolean(Static.SHOW_LEFT_ARROW,showLeftArrow);
@@ -72,6 +74,7 @@ public class RatingCardFragment extends Fragment {
         return f;
     }
 
+>>>>>>> 65453a63c6d3d7d76d2a388aad7ceaf4690edc0a
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

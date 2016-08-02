@@ -13,6 +13,9 @@ public class Static {
 
     public static final String RATING_CARD_USER_ID = "RATING_CARD_USER_ID";
 
+    public static final String SHOW_LEFT_ARROW = "SHOW_LEFT_ARROW";
+    public static final String SHOW_RIGHT_ARROW = "SHOW_RIGHT_ARROW";
+
 
     public static Judgement[] judgementList = {
             new Judgement("Trustworthy", 0),

@@ -10,9 +10,7 @@ import android.widget.TextView;
 import com.mattsteban.checkyoself.BusProvider;
 import com.mattsteban.checkyoself.Events.StarClickedEvent;
 import com.mattsteban.checkyoself.R;
-import com.mattsteban.checkyoself.RatingsHelper;
 import com.mattsteban.checkyoself.models.Judgement;
-import com.mattsteban.checkyoself.models.Rating;
 import com.mattsteban.checkyoself.views.FiveStarRatingView;
 
 import java.util.List;
@@ -51,35 +49,35 @@ public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecycl
             //Setting text view title
             customViewHolder.fieldName.setText(judgementItem.getFieldName());
 
-        ImageView star1 = (ImageView) customViewHolder.ratingView.star1;
+        ImageView star1 = customViewHolder.ratingView.star1;
         star1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 1, ratingCardUserId));
             }
         });
-        ImageView star2 = (ImageView) customViewHolder.ratingView.star2;
+        ImageView star2 = customViewHolder.ratingView.star2;
         star2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 2, ratingCardUserId));
             }
         });
-        ImageView star3 = (ImageView) customViewHolder.ratingView.star3;
+        ImageView star3 =customViewHolder.ratingView.star3;
         star3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 3, ratingCardUserId));
             }
         });
-        ImageView star4 = (ImageView) customViewHolder.ratingView.star4;
+        ImageView star4 =  customViewHolder.ratingView.star4;
         star4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 4, ratingCardUserId));
             }
         });
-        ImageView star5 = (ImageView) customViewHolder.ratingView.star5;
+        ImageView star5 = customViewHolder.ratingView.star5;
         star5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
