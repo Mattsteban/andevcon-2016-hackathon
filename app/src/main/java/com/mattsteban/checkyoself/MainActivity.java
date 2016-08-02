@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.current_logged_in_user_email)
     TextView tvCurrentLoggedInEmail;
 
-    @BindView(R.id.btn_trigger_user_call)
-    Button btnTriggerUserCall;
-
     FirebaseDatabase database;
     User currentUser;
 
