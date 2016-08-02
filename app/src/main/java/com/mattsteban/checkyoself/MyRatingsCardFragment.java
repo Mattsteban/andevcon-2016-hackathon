@@ -24,7 +24,7 @@ import com.mattsteban.checkyoself.models.Rating;
 import com.mattsteban.checkyoself.models.User;
 import com.squareup.otto.Subscribe;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -133,7 +133,7 @@ public class MyRatingsCardFragment extends Fragment {
 
     private void bindAdapter(Rating rating){
         if (rating == null){
-            adapter.setJudgementList(Arrays.asList(Static.judgementList));
+            adapter.setJudgementList(new ArrayList<>(Static.getDefaultJudgments()));
         }
         else {
             adapter.setJudgementList(rating.getJudgementList());
