@@ -7,12 +7,21 @@ import java.util.List;
  */
 public class Rating {
 
+    int id;
     String personAbout;
     String personFrom;
     List<Judgement> judgementList;
 
     public Rating() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public List<Judgement> getJudgementList() {
