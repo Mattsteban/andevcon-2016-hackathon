@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 //        //for testing move elsewhere later
 //        FragmentManager fm = getFragmentManager();
 //        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.frame_container, new FragmentMain());
+//        fragmentTransaction.replace(R.id.frame_container, new RatingCardFragment());
 //        fragmentTransaction.commit();
     }
 

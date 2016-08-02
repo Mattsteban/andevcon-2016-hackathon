@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mattsteban.checkyoself.adapter.RatingRecyclerViewAdapter;
 import com.mattsteban.checkyoself.models.Judgement;
 
@@ -21,16 +23,28 @@ import butterknife.ButterKnife;
 /**
  * Created by matt on 8/1/16.
  */
-public class FragmentMain extends Fragment {
+public class RatingCardFragment extends Fragment {
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    String ratingCardUserId;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main,container,false);
         ButterKnife.bind(this,view);
+
+        Bundle b = getArguments();
+        if (b != null){
+            ratingCardUserId = b.getString("RATING_CARD_USER_ID");
+        }
+
+
+
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dbRefRatings = db.getReference(Static.RATINGS);
 
         List<Judgement> judgementList = new ArrayList<>();
         judgementList.add(new Judgement("Happy",4));
