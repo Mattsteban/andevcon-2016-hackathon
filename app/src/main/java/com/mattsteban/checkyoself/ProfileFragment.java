@@ -118,7 +118,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        adapter = new RatingRecyclerViewAdapter();
+        adapter = new RatingRecyclerViewAdapter(ratingCardUserId);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
