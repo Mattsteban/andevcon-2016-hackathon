@@ -124,7 +124,7 @@ public class RatingCardFragment extends Fragment {
             }
         });
 
-        adapter = new RatingRecyclerViewAdapter();
+        adapter = new RatingRecyclerViewAdapter(ratingCardUserId);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
@@ -140,20 +140,23 @@ public class RatingCardFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+
     @Subscribe
     public void onStarClickedEvent(StarClickedEvent event){
-        Rating rating = new Rating();
+        if (event.getRatingCardUserId().equals(ratingCardUserId)) {
+            Rating rating = new Rating();
 
-        // Judgments
-        List<Judgement> judgements = adapter.getJudgementList();
-        int index = judgements.indexOf(event.getJudgement());
-        judgements.get(index).setFieldValue(event.getStarClicked());
-        rating.setJudgementList(judgements);
+            // Judgments
+            List<Judgement> judgements = adapter.getJudgementList();
+            int index = judgements.indexOf(event.getJudgement());
+            judgements.get(index).setFieldValue(event.getStarClicked());
+            rating.setJudgementList(judgements);
 
-        rating.setPersonAbout(ratingCardUserId);
-        rating.setPersonFrom(((MainActivity)getActivity()).currentUser.getId());
+            rating.setPersonAbout(ratingCardUserId);
+            rating.setPersonFrom(((MainActivity) getActivity()).currentUser.getId());
 
-        RatingsHelper.postRating(rating);
+            RatingsHelper.postRating(rating);
+        }
     }
 
     @Override
