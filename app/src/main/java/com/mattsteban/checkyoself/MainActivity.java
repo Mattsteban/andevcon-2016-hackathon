@@ -1,41 +1,34 @@
 package com.mattsteban.checkyoself;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mattsteban.checkyoself.Events.UserRetrievedEvent;
+import com.mattsteban.checkyoself.adapter.RatingPagerAdapter;
 import com.mattsteban.checkyoself.models.User;
-import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -44,8 +37,13 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.current_logged_in_user_email)
     TextView tvCurrentLoggedInEmail;
 
+    @BindView(R.id.rating_pager)
+    ViewPager ratingViewPager;
+
     FirebaseDatabase database;
     User currentUser;
+
+    RatingPagerAdapter pagerAdapter;
 
     List<User> userList = new ArrayList<>();
     boolean isComplete = false;
@@ -96,11 +94,12 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (!isComplete){
+                    //TODO this will probably have to be changed due to view pager
                     isComplete = true;
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_container, RatingCardFragment.newInstance(userList.get(0).getId()));
-                    fragmentTransaction.commit();
+                    FragmentManager fm =getSupportFragmentManager();
+
+                    pagerAdapter = new RatingPagerAdapter(fm,userList);
+                    ratingViewPager.setAdapter(pagerAdapter);
                 }
             }
 
