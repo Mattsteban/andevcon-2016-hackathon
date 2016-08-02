@@ -18,8 +18,11 @@ import java.util.List;
 public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecyclerViewAdapter.CustomViewHolder> {
     private List<Judgement> judgementList;
 
-    public RatingRecyclerViewAdapter(List<Judgement> judgementList) {
-            this.judgementList = judgementList;
+    public RatingRecyclerViewAdapter() {
+    }
+
+    public void setJudgementList(List<Judgement> judgementList){
+        this.judgementList = judgementList;
     }
 
     @Override

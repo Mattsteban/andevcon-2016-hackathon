@@ -9,10 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.mattsteban.checkyoself.adapter.RatingRecyclerViewAdapter;
 import com.mattsteban.checkyoself.models.Judgement;
+import com.mattsteban.checkyoself.models.Rating;
+import com.mattsteban.checkyoself.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +37,10 @@ public class RatingCardFragment extends Fragment {
 
     String ratingCardUserId;
 
+    RatingRecyclerViewAdapter adapter;
+
+    User user;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,22 +52,55 @@ public class RatingCardFragment extends Fragment {
             ratingCardUserId = b.getString("RATING_CARD_USER_ID");
         }
 
-
-
         FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
+        dbRefUser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
         DatabaseReference dbRefRatings = db.getReference(Static.RATINGS);
 
-        List<Judgement> judgementList = new ArrayList<>();
-        judgementList.add(new Judgement("Happy",4));
-        judgementList.add(new Judgement("Ugly",2));
-        judgementList.add(new Judgement("TrustWorthy",0));
-        judgementList.add(new Judgement("Git Gud",1));
+        Query userRatings = dbRefRatings.orderByChild("personAbout").equalTo(ratingCardUserId);
+        userRatings.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    Rating rating = snapshot.getValue(Rating.class);
+                    if (((MainActivity)getActivity()).currentUser.getId().equals(rating.getPersonFrom())){
+                        bindAdapter(rating);
+                    }
+                }
+            }
 
-        RatingRecyclerViewAdapter adapter = new RatingRecyclerViewAdapter(judgementList);
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return view;
+    }
+
+    private void bindAdapter(Rating rating){
+        if (adapter == null){
+            adapter = new RatingRecyclerViewAdapter();
+        }
+        adapter.setJudgementList(rating.getJudgementList());
+        adapter.notifyDataSetChanged();
     }
 
     @Override

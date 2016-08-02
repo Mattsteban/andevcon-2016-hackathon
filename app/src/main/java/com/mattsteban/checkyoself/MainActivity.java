@@ -16,9 +16,15 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.mattsteban.checkyoself.models.User;
+
+import java.util.Iterator;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,7 +60,6 @@ public class MainActivity extends AppCompatActivity {
                     String email = user.getEmail();
                     Uri photoUrl = user.getPhotoUrl();
 
-
                     // The user's ID, unique to the Firebase project. Do NOT use this value to
                     // authenticate with your backend server, if you have one. Use
                     // FirebaseUser.getToken() instead.
@@ -69,6 +74,22 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed out
                     tvCurrentLoggedInEmail.setText("Not Currently Signed In.");
                 }
+            }
+        });
+
+
+        DatabaseReference dbRefUsers = database.getReference(Static.USERS);
+        dbRefUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
