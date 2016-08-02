@@ -89,7 +89,6 @@ public class CheckMyselfActivity extends AppCompatActivity {
             }
         });
 
-
         DatabaseReference dbRefUsers = database.getReference(Static.USERS);
         dbRefUsers.addValueEventListener(new ValueEventListener() {
             @Override
@@ -161,11 +160,6 @@ public class CheckMyselfActivity extends AppCompatActivity {
 
             }
         }
-    }
-
-    @OnClick(R.id.btn_check_myself)
-    public void onCheckMyselfClick(View view){
-
     }
 
     @Override
