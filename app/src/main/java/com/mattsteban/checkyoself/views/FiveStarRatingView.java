@@ -51,6 +51,7 @@ public class FiveStarRatingView extends LinearLayout {
     }
 
     public void updateStars(int totalStars){
+        reset();
         switch (totalStars){
             case 5:
                 star5.setBackground(getResources().getDrawable(R.drawable.filled_star));
@@ -65,6 +66,15 @@ public class FiveStarRatingView extends LinearLayout {
             case 0:
                 break;
         }
+    }
+
+    public void reset(){
+        star1.setBackground(getResources().getDrawable(R.drawable.empty_star));
+        star2.setBackground(getResources().getDrawable(R.drawable.empty_star));
+        star3.setBackground(getResources().getDrawable(R.drawable.empty_star));
+        star4.setBackground(getResources().getDrawable(R.drawable.empty_star));
+        star5.setBackground(getResources().getDrawable(R.drawable.empty_star));
+
     }
 
     public void setTotalStars(int stars){
