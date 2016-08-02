@@ -18,8 +18,6 @@ import java.util.List;
 public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecyclerViewAdapter.CustomViewHolder> {
     private List<Judgement> judgementList;
 
-
-
     public RatingRecyclerViewAdapter(List<Judgement> judgementList) {
             this.judgementList = judgementList;
     }
@@ -37,7 +35,6 @@ public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecycl
             Judgement judgementItem = judgementList.get(i);
 
             customViewHolder.ratingView.setTotalStars(judgementItem.getFieldValue());
-
             //Setting text view title
             customViewHolder.fieldName.setText(judgementItem.getFieldName());
     }

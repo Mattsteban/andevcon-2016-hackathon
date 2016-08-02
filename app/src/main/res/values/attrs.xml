@@ -5,4 +5,7 @@
         <attr name="stars" format="integer" />
     </declare-styleable>
 
+    <declare-styleable name="star_settings">
+        <attr name="is_clicked" format="boolean" />
+    </declare-styleable>
 </resources>
