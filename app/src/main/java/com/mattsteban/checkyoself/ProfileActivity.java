@@ -37,7 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     DatabaseReference dbRefUsers = database.getReference(Static.USERS + "/" + uid + "/");
 
                     tvCurrentLoggedInEmail.setText(email);
-                    currentUser = new User(email, name, uid, true, photoUrl != null ? photoUrl.toString() : "https://randomuser.me/api/portraits/men/80.jpg");
+                    currentUser = new User(email, name, uid, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com");
                     dbRefUsers.setValue(currentUser);
                 } else {
                     // User is signed out
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                     isComplete = true;
                     FragmentManager fm = getFragmentManager();
                     FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_container, RatingCardFragment.newInstance(userList.get(0).getId()));
+                    fragmentTransaction.replace(R.id.frame_container, ProfileFragment.newInstance(currentUser.getId()));
                     fragmentTransaction.commit();
                 }
             }
