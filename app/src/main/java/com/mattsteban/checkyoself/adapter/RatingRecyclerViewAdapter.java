@@ -4,10 +4,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mattsteban.checkyoself.BusProvider;
+import com.mattsteban.checkyoself.Events.StarClickedEvent;
 import com.mattsteban.checkyoself.R;
+import com.mattsteban.checkyoself.RatingsHelper;
 import com.mattsteban.checkyoself.models.Judgement;
+import com.mattsteban.checkyoself.models.Rating;
 import com.mattsteban.checkyoself.views.FiveStarRatingView;
 
 import java.util.List;
@@ -25,21 +30,60 @@ public class RatingRecyclerViewAdapter extends RecyclerView.Adapter<RatingRecycl
         this.judgementList = judgementList;
     }
 
-    @Override
-    public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.inflatable_rating_view, null);
-
-            CustomViewHolder viewHolder = new CustomViewHolder(view);
-            return viewHolder;
+    public List<Judgement> getJudgementList(){
+        return this.judgementList;
     }
 
     @Override
-    public void onBindViewHolder(CustomViewHolder customViewHolder, int i) {
+    public CustomViewHolder onCreateViewHolder(ViewGroup viewGroup, final int i) {
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.inflatable_rating_view, null);
+
+        return new CustomViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(CustomViewHolder customViewHolder, final int i) {
             Judgement judgementItem = judgementList.get(i);
 
             customViewHolder.ratingView.setTotalStars(judgementItem.getFieldValue());
             //Setting text view title
             customViewHolder.fieldName.setText(judgementItem.getFieldName());
+
+        ImageView star1 = (ImageView) customViewHolder.ratingView.star1;
+        star1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 1));
+            }
+        });
+        ImageView star2 = (ImageView) customViewHolder.ratingView.star2;
+        star2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 2));
+            }
+        });
+        ImageView star3 = (ImageView) customViewHolder.ratingView.star3;
+        star3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 3));
+            }
+        });
+        ImageView star4 = (ImageView) customViewHolder.ratingView.star4;
+        star4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 4));
+            }
+        });
+        ImageView star5 = (ImageView) customViewHolder.ratingView.star5;
+        star5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                BusProvider.getInstance().post(new StarClickedEvent(judgementList.get(i), 5));
+            }
+        });
     }
 
     @Override

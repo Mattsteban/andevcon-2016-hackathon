@@ -31,4 +31,20 @@ public class Judgement {
     public void setFieldValue(int fieldValue) {
         this.fieldValue = fieldValue;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Judgement judgement = (Judgement) o;
+
+        return fieldName.equals(judgement.fieldName);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return fieldName.hashCode();
+    }
 }

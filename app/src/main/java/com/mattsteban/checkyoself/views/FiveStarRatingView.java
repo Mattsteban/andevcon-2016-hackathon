@@ -13,11 +13,11 @@ import com.mattsteban.checkyoself.R;
  * Created by matt on 8/1/16.
  */
 public class FiveStarRatingView extends LinearLayout {
-    ImageView star1;
-    ImageView star2;
-    ImageView star3;
-    ImageView star4;
-    ImageView star5;
+    public ImageView star1;
+    public ImageView star2;
+    public ImageView star3;
+    public ImageView star4;
+    public ImageView star5;
     private int totalStars = 0;
 
     public FiveStarRatingView(Context context, AttributeSet attrs){

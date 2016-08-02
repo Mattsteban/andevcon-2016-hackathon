@@ -1,5 +1,7 @@
 package com.mattsteban.checkyoself;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -22,9 +24,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mattsteban.checkyoself.Events.UserRetrievedEvent;
 import com.mattsteban.checkyoself.models.User;
+import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
     User currentUser;
+
+    List<User> userList = new ArrayList<>();
+    boolean isComplete = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,13 +87,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         DatabaseReference dbRefUsers = database.getReference(Static.USERS);
         dbRefUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                    userList.add(snapshot.getValue(User.class));
+                }
 
+                if (!isComplete){
+                    isComplete = true;
+                    FragmentManager fm = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.replace(R.id.frame_container, RatingCardFragment.newInstance(userList.get(0).getId()));
+                    fragmentTransaction.commit();
                 }
             }
 
@@ -93,11 +110,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        //for testing move elsewhere later
-//        FragmentManager fm = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-//        fragmentTransaction.replace(R.id.frame_container, new RatingCardFragment());
-//        fragmentTransaction.commit();
     }
 
     // Options Menu Selection. Sign In or Sign Out.
@@ -157,11 +169,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        BusProvider.getInstance().register(this);
+
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         if (currentUser != null && database != null){
             currentUser.isOnline = false;
             database.getReference(Static.USERS + "/" + currentUser.id + "/").setValue(currentUser);
         }
+        BusProvider.getInstance().unregister(this);
     }
 }

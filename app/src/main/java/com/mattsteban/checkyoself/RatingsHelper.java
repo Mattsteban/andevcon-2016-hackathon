@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class RatingsHelper {
 
-    public void postRating(Rating rating){
+    public static void postRating(Rating rating){
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference ratingsRef = db.getReference(Static.RATINGS);
         ratingsRef.push().setValue(rating);
