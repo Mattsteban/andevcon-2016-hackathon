@@ -25,17 +25,32 @@ public class FiveStarRatingView extends LinearLayout {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.inflatable_five_star_layout, this, true);
+        handleItBaby(context,attrs);
+    }
+
+    public FiveStarRatingView(Context context, AttributeSet attrs,int totalStars){
+        super(context,attrs);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        inflater.inflate(R.layout.inflatable_five_star_layout, this, true);
+        this.totalStars = totalStars;
+        handleItBaby(context,attrs);
+
+    }
+
+    private void handleItBaby(Context context , AttributeSet attrs){
         bindViews();
-
         handleAttrs(context,attrs);
-
+        updateStars(totalStars);
     }
 
     private void handleAttrs(Context context,AttributeSet attrs){
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.rating_view);
-        totalStars = a.getInt(R.styleable.rating_view_stars,0);
+        this.totalStars = a.getInt(R.styleable.rating_view_stars,0);
+    }
 
+    public void updateStars(int totalStars){
         switch (totalStars){
             case 5:
                 star5.setBackground(getResources().getDrawable(R.drawable.filled_star));
@@ -54,13 +69,20 @@ public class FiveStarRatingView extends LinearLayout {
 
     public void setTotalStars(int stars){
         totalStars = stars;
+        updateStars(totalStars);
     }
 
+
+    public int getTotalStars(){
+        return totalStars;
+    }
     private void bindViews(){
-        star1 = (ImageView)findViewById(R.id.star1);
+        star1 = (ImageView) findViewById(R.id.star1);
         star2 = (ImageView)findViewById(R.id.star2);
         star3 = (ImageView)findViewById(R.id.star3);
         star4 = (ImageView)findViewById(R.id.star4);
         star5 = (ImageView)findViewById(R.id.star5);
     }
+
+
 }
