@@ -80,6 +80,16 @@ public class ProfileActivity extends AppCompatActivity {
                     tvCurrentLoggedInEmail.setText(email);
                     currentUser = new User(email, name, uid, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com");
                     dbRefUsers.setValue(currentUser);
+
+                    if (!isComplete){
+                        if (currentUser != null) {
+                            isComplete = true;
+                            FragmentManager fm = getFragmentManager();
+                            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_container, ProfileFragment.newInstance(currentUser.getId()));
+                            fragmentTransaction.commit();
+                        }
+                    }
                 } else {
                     // User is signed out
                     tvCurrentLoggedInEmail.setText("Not Currently Signed In.");
@@ -91,16 +101,8 @@ public class ProfileActivity extends AppCompatActivity {
         dbRefUsers.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot snapshot: dataSnapshot.getChildren()) {
                     userList.add(snapshot.getValue(User.class));
-                }
-
-                if (!isComplete){
-                    isComplete = true;
-                    FragmentManager fm = getFragmentManager();
-                    FragmentTransaction fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.replace(R.id.frame_container, ProfileFragment.newInstance(currentUser.getId()));
-                    fragmentTransaction.commit();
                 }
             }
 

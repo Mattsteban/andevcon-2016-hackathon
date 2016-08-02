@@ -58,6 +58,7 @@ public class RatingCardFragment extends Fragment {
         f.setArguments(b);
         return f;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
