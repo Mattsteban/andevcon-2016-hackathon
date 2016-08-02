@@ -1,8 +1,9 @@
 package com.mattsteban.checkyoself;
 
+import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -29,20 +30,18 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by matt on 8/1/16.
  */
-public class RatingCardFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
     @BindView(R.id.profile_pic)
     ImageView ivProfilePhoto;
 
-    @BindView(R.id.is_online)
-    ImageView ivIsOnline;
-
     @BindView(R.id.name)
-    TextView tvName;
+    TextView tvProfileName;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -54,20 +53,23 @@ public class RatingCardFragment extends Fragment {
     public static Fragment newInstance(String ratingCardUserId){
         Bundle b = new Bundle();
         b.putString(Static.RATING_CARD_USER_ID, ratingCardUserId);
-        Fragment f = new RatingCardFragment();
+        Fragment f = new ProfileFragment();
         f.setArguments(b);
         return f;
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_rating_card,container,false);
+        View view = inflater.inflate(R.layout.fragment_profile,container,false);
         ButterKnife.bind(this,view);
+
 
         Bundle b = getArguments();
         if (b != null){
             ratingCardUserId = b.getString(Static.RATING_CARD_USER_ID);
         }
+
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
@@ -75,14 +77,7 @@ public class RatingCardFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final User user = dataSnapshot.getValue(User.class);
-                tvName.setText(user.getName());
-                if (user.isOnline()){
-                    ivIsOnline.setImageDrawable(getResources().getDrawable(R.drawable.circle_green, getActivity().getTheme()));
-                }
-                else {
-                    ivIsOnline.setImageDrawable(getResources().getDrawable(R.drawable.circle_red, getActivity().getTheme()));
-                }
-
+                tvProfileName.setText(user.getName());
 //                ivProfilePhoto.setOnClickListener(new View.OnClickListener() {
 //                    @Override
 //                    public void onClick(View view) {
@@ -110,8 +105,7 @@ public class RatingCardFragment extends Fragment {
                 else {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Rating rating = snapshot.getValue(Rating.class);
-
-                        if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
+                        if (((ProfileActivity) getActivity()).currentUser.getId().equals(rating.getPersonAbout())) {
                             bindAdapter(rating);
                         }
                     }
@@ -151,9 +145,15 @@ public class RatingCardFragment extends Fragment {
         rating.setJudgementList(judgements);
 
         rating.setPersonAbout(ratingCardUserId);
-        rating.setPersonFrom(((MainActivity)getActivity()).currentUser.getId());
+        rating.setPersonFrom(ratingCardUserId);
 
         RatingsHelper.postRating(rating);
+    }
+
+    @OnClick(R.id.btn_check_yoself)
+    public void onCheckYoselfClicked(View view){
+        Intent intent = new Intent(getActivity(), MainActivity.class);
+        startActivity(intent);
     }
 
     @Override
