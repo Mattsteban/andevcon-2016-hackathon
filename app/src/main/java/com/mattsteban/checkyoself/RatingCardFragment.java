@@ -128,18 +128,21 @@ public class RatingCardFragment extends Fragment {
         userRatings.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildrenCount() == 0){
-                    bindAdapter(null);
-                }
-                else {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Rating rating = snapshot.getValue(Rating.class);
+                boolean didDo = false;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Rating rating = snapshot.getValue(Rating.class);
 
-                        if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
-                            bindAdapter(rating);
-                        }
+                    if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
+                        bindAdapter(rating);
+
+                        didDo = true;
                     }
                 }
+
+                if (!didDo){
+                    bindAdapter(null);
+                }
+
             }
 
             @Override
