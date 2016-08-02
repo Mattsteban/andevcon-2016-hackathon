@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 /**
  * Created by matt on 8/1/16.
  */
-public class RatingCardFragment extends Fragment {
+public class MyRatingsCardFragment extends Fragment {
 
     @BindView(R.id.profile_pic)
     ImageView ivProfilePhoto;
@@ -47,30 +47,18 @@ public class RatingCardFragment extends Fragment {
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
 
-    @BindView(R.id.left_arrow)
-    ImageView leftArrow;
-
-    @BindView(R.id.right_arrow)
-    ImageView rightArrow;
-
     String ratingCardUserId;
 
     RatingRecyclerViewAdapter adapter;
+
+    private ValueEventListener valueEventListener;
     DatabaseReference dbRefUser;
-    ValueEventListener valueEventListener;
 
     public static Fragment newInstance(String ratingCardUserId){
         Bundle b = new Bundle();
         b.putString(Static.RATING_CARD_USER_ID, ratingCardUserId);
-        Fragment f = new RatingCardFragment();
+        Fragment f = new MyRatingsCardFragment();
         f.setArguments(b);
-        return f;
-    }
-
-    public static Fragment newInstance(String ratingCardUserId,boolean showLeftArrow,boolean showRightArrow){
-        Fragment f = newInstance(ratingCardUserId);
-        f.getArguments().putBoolean(Static.SHOW_LEFT_ARROW,showLeftArrow);
-        f.getArguments().putBoolean(Static.SHOW_RIGHT_ARROW,showRightArrow);
         return f;
     }
 
@@ -80,20 +68,14 @@ public class RatingCardFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rating_card,container,false);
         ButterKnife.bind(this,view);
 
-        boolean showLeftArrow = false;
-        boolean showRightArrow = false;
-
         Bundle b = getArguments();
         if (b != null){
             ratingCardUserId = b.getString(Static.RATING_CARD_USER_ID);
-            showLeftArrow = b.getBoolean(Static.SHOW_LEFT_ARROW);
-            showRightArrow = b.getBoolean(Static.SHOW_RIGHT_ARROW);
         }
-
-        manageArrows(showLeftArrow,showRightArrow);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
+
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -119,30 +101,29 @@ public class RatingCardFragment extends Fragment {
 
             }
         };
+
         dbRefUser.addValueEventListener(valueEventListener);
+
 
 
         DatabaseReference dbRefRatings = db.getReference(Static.RATINGS);
 
-        Query userRatings = dbRefRatings.orderByChild("personAbout").equalTo(ratingCardUserId);
+        Query userRatings = dbRefRatings.orderByChild("personFrom").equalTo(ratingCardUserId);
         userRatings.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean didDo = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Rating rating = snapshot.getValue(Rating.class);
-
-                    if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
-                        bindAdapter(rating);
-
-                        didDo = true;
-                    }
-                }
-
-                if (!didDo){
+                if (dataSnapshot.getChildrenCount() == 0){
                     bindAdapter(null);
                 }
+                else {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Rating rating = snapshot.getValue(Rating.class);
 
+                        if (getActivity() != null && ((CheckMyselfActivity) getActivity()).currentUser != null && ((CheckMyselfActivity) getActivity()).currentUser.getId().equals(rating.getPersonAbout())) {
+                            bindAdapter(rating);
+                        }
+                    }
+                }
             }
 
             @Override
@@ -157,18 +138,6 @@ public class RatingCardFragment extends Fragment {
         return view;
     }
 
-    private void manageArrows(boolean showLeftArrow,boolean showRightArrow){
-        if(showLeftArrow)
-            leftArrow.setVisibility(View.VISIBLE);
-        else
-            leftArrow.setVisibility(View.INVISIBLE);
-
-        if(showRightArrow)
-            rightArrow.setVisibility(View.VISIBLE);
-        else
-            rightArrow.setVisibility(View.INVISIBLE);
-    }
-
     private void bindAdapter(Rating rating){
         if (rating == null){
             adapter.setJudgementList(new ArrayList<>(Static.getDefaultJudgments()));
@@ -179,6 +148,11 @@ public class RatingCardFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        dbRefUser.removeEventListener(valueEventListener);
+    }
 
     @Subscribe
     public void onStarClickedEvent(StarClickedEvent event){
@@ -192,16 +166,10 @@ public class RatingCardFragment extends Fragment {
             rating.setJudgementList(judgements);
 
             rating.setPersonAbout(ratingCardUserId);
-            rating.setPersonFrom(((MainActivity) getActivity()).currentUser.getId());
+            rating.setPersonFrom(((CheckMyselfActivity) getActivity()).currentUser.getId());
 
             RatingsHelper.postRating(rating);
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        dbRefUser.removeEventListener(valueEventListener);
     }
 
     @Override

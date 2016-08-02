@@ -21,8 +21,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.mattsteban.checkyoself.adapter.RatingPagerAdapter;
+import com.mattsteban.checkyoself.models.Rating;
 import com.mattsteban.checkyoself.models.User;
 
 import java.util.ArrayList;
@@ -32,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class CheckMyselfActivity extends AppCompatActivity {
 
     public static final String TAG = "MainActivity";
 
@@ -98,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
                 if (!isComplete){
                     //TODO this will probably have to be changed due to view pager
                     isComplete = true;
-                    FragmentManager fm =getSupportFragmentManager();
+                    FragmentManager fm = getSupportFragmentManager();
 
-                    pagerAdapter = new RatingPagerAdapter(fm,new ArrayList<>(userList));
+                    pagerAdapter = new RatingPagerAdapter(fm, new ArrayList<>(userList), true);
                     ratingViewPager.setAdapter(pagerAdapter);
                 }
             }
@@ -158,12 +160,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }
-    }
-
-    @OnClick(R.id.btn_check_myself)
-    public void onCheckMyselfClick(View view){
-        Intent intent = new Intent(this, CheckMyselfActivity.class);
-        startActivity(intent);
     }
 
     @Override

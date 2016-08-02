@@ -24,7 +24,7 @@ import com.mattsteban.checkyoself.models.Rating;
 import com.mattsteban.checkyoself.models.User;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
@@ -56,8 +56,6 @@ public class RatingCardFragment extends Fragment {
     String ratingCardUserId;
 
     RatingRecyclerViewAdapter adapter;
-    DatabaseReference dbRefUser;
-    ValueEventListener valueEventListener;
 
     public static Fragment newInstance(String ratingCardUserId){
         Bundle b = new Bundle();
@@ -67,6 +65,8 @@ public class RatingCardFragment extends Fragment {
         return f;
     }
 
+<<<<<<< HEAD
+=======
     public static Fragment newInstance(String ratingCardUserId,boolean showLeftArrow,boolean showRightArrow){
         Fragment f = newInstance(ratingCardUserId);
         f.getArguments().putBoolean(Static.SHOW_LEFT_ARROW,showLeftArrow);
@@ -74,6 +74,7 @@ public class RatingCardFragment extends Fragment {
         return f;
     }
 
+>>>>>>> 65453a63c6d3d7d76d2a388aad7ceaf4690edc0a
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,8 +94,8 @@ public class RatingCardFragment extends Fragment {
         manageArrows(showLeftArrow,showRightArrow);
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
-        valueEventListener = new ValueEventListener() {
+        DatabaseReference dbRefUser = db.getReference(Static.USERS + "/" + ratingCardUserId);
+        dbRefUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 final User user = dataSnapshot.getValue(User.class);
@@ -118,8 +119,7 @@ public class RatingCardFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        };
-        dbRefUser.addValueEventListener(valueEventListener);
+        });
 
 
         DatabaseReference dbRefRatings = db.getReference(Static.RATINGS);
@@ -128,21 +128,18 @@ public class RatingCardFragment extends Fragment {
         userRatings.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean didDo = false;
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Rating rating = snapshot.getValue(Rating.class);
-
-                    if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
-                        bindAdapter(rating);
-
-                        didDo = true;
-                    }
-                }
-
-                if (!didDo){
+                if (dataSnapshot.getChildrenCount() == 0){
                     bindAdapter(null);
                 }
+                else {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Rating rating = snapshot.getValue(Rating.class);
 
+                        if (getActivity() != null && ((MainActivity) getActivity()).currentUser != null && ((MainActivity) getActivity()).currentUser.getId().equals(rating.getPersonFrom())) {
+                            bindAdapter(rating);
+                        }
+                    }
+                }
             }
 
             @Override
@@ -171,7 +168,7 @@ public class RatingCardFragment extends Fragment {
 
     private void bindAdapter(Rating rating){
         if (rating == null){
-            adapter.setJudgementList(new ArrayList<>(Static.getDefaultJudgments()));
+            adapter.setJudgementList(Arrays.asList(Static.judgementList));
         }
         else {
             adapter.setJudgementList(rating.getJudgementList());
@@ -196,12 +193,6 @@ public class RatingCardFragment extends Fragment {
 
             RatingsHelper.postRating(rating);
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        dbRefUser.removeEventListener(valueEventListener);
     }
 
     @Override

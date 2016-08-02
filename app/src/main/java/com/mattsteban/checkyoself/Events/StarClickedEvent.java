@@ -7,12 +7,18 @@ import com.mattsteban.checkyoself.models.Judgement;
  */
 public class StarClickedEvent {
 
+    String ratingCardUserId;
     Judgement judgement;
     int starClicked;
 
-    public StarClickedEvent(Judgement judgement, int starClicked) {
+    public StarClickedEvent(Judgement judgement, int starClicked, String ratingCardUserId) {
         this.judgement = judgement;
         this.starClicked = starClicked;
+        this.ratingCardUserId = ratingCardUserId;
+    }
+
+    public String getRatingCardUserId() {
+        return ratingCardUserId;
     }
 
     public Judgement getJudgement() {
