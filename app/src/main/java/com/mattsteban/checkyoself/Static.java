@@ -17,7 +17,7 @@ public class Static {
     public static final String SHOW_RIGHT_ARROW = "SHOW_RIGHT_ARROW";
 
 
-    public static Judgement[] judgementList = {
+    public static final Judgement[] judgementList = {
             new Judgement("Trustworthy", 0),
             new Judgement("Attractiveness", 0),
             new Judgement("Artistic", 0),
