@@ -57,15 +57,16 @@ public class MainActivity extends AppCompatActivity {
                     String email = user.getEmail();
                     Uri photoUrl = user.getPhotoUrl();
 
+
                     // The user's ID, unique to the Firebase project. Do NOT use this value to
                     // authenticate with your backend server, if you have one. Use
                     // FirebaseUser.getToken() instead.
                     String uid = user.getUid();
 
-                    DatabaseReference dbRefUsers = database.getReference(Static.USERS).child(uid);
+                    DatabaseReference dbRefUsers = database.getReference(Static.USERS + "/" + uid + "/");
 
                     tvCurrentLoggedInEmail.setText(email);
-                    currentUser = new User(email, name, email, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com");
+                    currentUser = new User(email, name, uid, true, photoUrl != null ? photoUrl.toString() : "SOME_URL.com");
                     dbRefUsers.setValue(currentUser);
                 } else {
                     // User is signed out
@@ -79,26 +80,6 @@ public class MainActivity extends AppCompatActivity {
 //        FragmentTransaction fragmentTransaction = fm.beginTransaction();
 //        fragmentTransaction.replace(R.id.frame_container, new FragmentMain());
 //        fragmentTransaction.commit();
-    }
-
-    @OnClick(R.id.btn_trigger_user_call)
-    public void onBtnTriggerUserCallClick(View view){
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
-
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getToken() instead.
-            String uid = user.getUid();
-            tvCurrentLoggedInEmail.setText(email);
-        }
-        else {
-            tvCurrentLoggedInEmail.setText("Not Currently Signed In.");
-        }
     }
 
     // Options Menu Selection. Sign In or Sign Out.
@@ -153,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         if (currentUser != null && database != null){
             currentUser.isOnline = true;
-            database.getReference(Static.USERS).setValue(currentUser);
+            database.getReference(Static.USERS + "/" + currentUser.id + "/").setValue(currentUser);
         }
     }
 
@@ -162,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         if (currentUser != null && database != null){
             currentUser.isOnline = false;
-            database.getReference(Static.USERS).setValue(currentUser);
+            database.getReference(Static.USERS + "/" + currentUser.id + "/").setValue(currentUser);
         }
     }
 }

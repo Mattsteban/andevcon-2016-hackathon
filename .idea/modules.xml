@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/andevcon-2016-hackathon.iml" filepath="$PROJECT_DIR$/andevcon-2016-hackathon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/andevcon-2016-hackathon.iml" filepath="$PROJECT_DIR$/andevcon-2016-hackathon.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
